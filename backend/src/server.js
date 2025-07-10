@@ -3,9 +3,12 @@ import { ENV } from './config/env.js';
 import { db } from './config/db.js';
 import { favoritesTable } from './db/schema.js';
 import { and, eq } from 'drizzle-orm';
+import job from "./config/cron.js";
 
 const app = express();
 const PORT = ENV.PORT || 5000;
+
+if (ENV.NODE_ENV === "production") job.start();
 
 app.use(express.json());
 
@@ -52,6 +55,8 @@ app.get("/api/favorites/:userId", async (req, res) => {
         
     }
 });
+
+// here
 
 app.delete("/api/favorites/:userId/:recipeId", async (req, res) => {
     try {
